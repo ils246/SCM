@@ -1,6 +1,20 @@
 from random import randint,choice
 
 def talk(agent,memories,G=None):
+    '''
+    Selects a random partner for agent to get a new idea from.
+    (agent gets idea from partner, not the other way around)
+    If G is provided, then it chooses a partner from the network.
+
+    Parameters
+    ----------
+    agent : int
+        Agent id
+    memories : list
+        List of sets for all the agents
+    G : networkx.Graph (optional)
+        Network of connections between agents
+    '''
     N=len(memories)
     partner = randint(0, N-1)
     while partner == agent:
@@ -19,12 +33,35 @@ def talk(agent,memories,G=None):
     return memories
 
 def think(agent,memories,idea_tick):
+    '''
+    Adds a new idea to the memory of agent.
+    (Successfully think)
+
+    Parameters
+    ----------
+    agent : int
+        Agent id
+    memories : list
+        List of sets for all the agents
+    idea_tick : int
+        Keeps track of the id of the last created idea
+    '''
     newIdea = idea_tick
     idea_tick+=1
     memories[agent].add(newIdea)
     return memories,idea_tick
 
 def die(agent,memories):
+    '''
+    Sets the memory of agent to an empty set.
+
+    Parameters
+    ----------
+    agent : int
+        Agent id
+    memories : list
+        List of sets for all the agents
+    '''
     memories[agent] = set()
     return memories
 
