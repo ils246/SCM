@@ -87,12 +87,6 @@ for j in range(len(output1)):
     f.close()
 
 
-# sabemos poco
-#
-# los sistemas nerviosos y como la communicacion afecta la capcaidad de estos sitemas para andcuando os sitemas estan hipercomunicados e
-# inovaion -> l gente va a decir que la innovacion biende hablar on la gente
-
-
 
 #for j in range(len(output1)):
 #    a,b = [[] for i in range(2)]
