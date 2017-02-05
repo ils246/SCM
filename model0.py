@@ -8,7 +8,6 @@ start_time = time.time()
 
 def sim(par, ticks):
     N,p,q,beta,gtype = par
-    # t = open(memfile,'w+')
 
     if gtype=='random':
         r = 4/N
@@ -60,4 +59,5 @@ def sim(par, ticks):
     return longScm, individualMem
 
 rs= sim([2000,0.5,0.1,0.1,'complete'],20000)
-print("--- %s seconds ---" % (time.time() - start_time))
+t = open('testfile.csv', 'w+')
+t.write("--- %s seconds ---" % (time.time() - start_time))
