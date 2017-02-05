@@ -59,9 +59,5 @@ def sim(par, ticks):
         #     memAux = countby(len, memories)
     return longScm, individualMem
 
-rs= sim([100,0.5,0.1,0.1,'complete'],20000)
+rs= sim([2000,0.5,0.1,0.1,'complete'],20000)
 print("--- %s seconds ---" % (time.time() - start_time))
-
-
-t = open('testfile.csv','w+')
-json.dump(rs[1],t)
