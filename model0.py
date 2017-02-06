@@ -1,11 +1,12 @@
 import itertools
 from functions import talk,think,die,countby,initialize_net
 from random import random,choice
+import numpy as np
 
 def model0(par, ticks):
 	'''
 	Runs the Model 0 for the given set of parameters and the given number of timesteps.
-	
+
 	Parameters
 	----------
 	par : tuple
@@ -37,7 +38,7 @@ def model0(par, ticks):
 
 	for tick in range(ticks):
 		for i in range(N):
-			agent = choice(range(N))
+			agent = np.random.randint(0,N)
 			params=pop[agent]
 			myp = random()
 			if myp < params['p']:
@@ -50,20 +51,19 @@ def model0(par, ticks):
 			if b < params['beta']:
 				memories = die(agent,memories)
 		tempMem = [len(mem) for mem in memories]
-		individualMem.append(tempMem) 
+		individualMem.append(tempMem)
 		if tick % 10 == 0:
 			scm = set(itertools.chain.from_iterable(memories))
 			longScm.append(len(scm))
-		# if tick == ticks - 1:
-		#	memAux = countby(memories)
 	return longScm, individualMem
 
 
 
-if __name__ == "__main__":
+ if __name__ == "__main__":
 	import time
 	print 'Testing model0'
 	start_time = time.time()
-	rs= model0([2000,0.5,0.1,0.1,'complete'],20000)
-	t = open('testfile.csv', 'w+')
+	rs= model0([5000,0.5,0.1,0.1,'complete'],4000)
+	t = open('finaltest.csv', 'w+')
 	t.write("--- %s seconds ---" % (time.time() - start_time))
+	t.close()

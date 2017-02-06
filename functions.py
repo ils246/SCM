@@ -1,6 +1,7 @@
 from random import randint,choice
 from collections import Counter
 from networkx import gnp_random_graph,barabasi_albert_graph,star_graph
+import numpy as np
 
 def talk(agent,memories,G=None):
 	'''
@@ -23,10 +24,11 @@ def talk(agent,memories,G=None):
 		Updated list of sets for all the agents
 	'''
 	N=len(memories)
-	partner = randint(0, N-1)
+	partner = np.random.randint(0,N)
+	# partner = randint(0, N-1)
 	while partner == agent:
 		if G is None:
-			partner = randint(0, N-1)
+			partner = np.random.randint(0,N)
 		else:
 			neighs = G.neighbors(agent) #Change this line to upgrade to igraph
 			if len(neighs)!=0:
@@ -75,7 +77,7 @@ def die(agent,memories):
 		Agent id
 	memories : list
 		List of sets for all the agents
-	
+
 	Returns
 	-------
 	memories : list
@@ -94,7 +96,7 @@ def countby(seq,f=len):
 		List of elements to which apply f to
 	f : function (default=len)
 		Function to apply to each one of elements in seq
-	
+
 	Returns
 	-------
 	result : dict
@@ -102,14 +104,6 @@ def countby(seq,f=len):
 	'''
 	result = Counter([f(value) for value in seq])
 
-	#This chunk is the old code
-	#result = {}
-	#for value in seq:
-	#	key = f(value)
-	#	if key in result:
-	#		result[key] += 1
-	#	else:
-	#		result[key] = 1
 	return result
 
 

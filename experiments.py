@@ -33,3 +33,8 @@ for j in range(len(output1)):
     # inside are the memories of each agent.
     json.dump(b,f)
     f.close()
+
+
+# for larger N, I will only run 50 sims of each in order to make it faster.
+# Similarly, I will cut down the run time to 4000 ticks. The sim converges around 1000 - 2000
+# depending on the p value, so 4000 ticks should be plenty of time. 
