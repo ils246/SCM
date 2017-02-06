@@ -1,4 +1,5 @@
 from random import randint,choice
+from collections import Counter
 from networkx import gnp_random_graph,barabasi_albert_graph,star_graph
 
 def talk(agent,memories,G=None):
@@ -83,30 +84,32 @@ def die(agent,memories):
 	memories[agent] = set()
 	return memories
 
-def countby(f, seq):
+def countby(seq,f=len):
 	'''
-	The countby function is used for the memories. 
-	It takes all the agent's memories and makes a dictionary that tells me how many agents have 1 idea, 2 ideas etc...
+	Given a sequence, it applies function f (len) and then counts each occurence.
 
 	Parameters
 	----------
-	f : ???
-		???
-	seq : ???
-		???
-
+	seq : list
+		List of elements to which apply f to
+	f : function (default=len)
+		Function to apply to each one of elements in seq
+	
 	Returns
 	-------
-	result : ???
-		???
+	result : dict
+		Number of occurences of the key value.
 	'''
-	result = {}
-	for value in seq:
-		key = f(value)
-		if key in result:
-			result[key] += 1
-		else:
-			result[key] = 1
+	result = Counter([f(value) for value in seq])
+
+	#This chunk is the old code
+	#result = {}
+	#for value in seq:
+	#	key = f(value)
+	#	if key in result:
+	#		result[key] += 1
+	#	else:
+	#		result[key] = 1
 	return result
 
 

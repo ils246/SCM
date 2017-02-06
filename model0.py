@@ -55,7 +55,7 @@ def model0(par, ticks):
 			scm = set(itertools.chain.from_iterable(memories))
 			longScm.append(len(scm))
 		# if tick == ticks - 1:
-		#	memAux = countby(len, memories)
+		#	memAux = countby(memories)
 	return longScm, individualMem
 
 
