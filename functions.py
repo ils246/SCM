@@ -14,6 +14,11 @@ def talk(agent,memories,G=None):
         List of sets for all the agents
     G : networkx.Graph (optional)
         Network of connections between agents
+
+	Returns
+    -------
+    memories : list
+        Updated list of sets for all the agents
     '''
     N=len(memories)
     partner = randint(0, N-1)
@@ -45,6 +50,13 @@ def think(agent,memories,idea_tick):
         List of sets for all the agents
     idea_tick : int
         Keeps track of the id of the last created idea
+
+    Returns
+    -------
+    memories : list
+        Updated list of sets for all the agents
+	idea_tick : int
+		Updated counter that keeps track of the id of the last created idea
     '''
     newIdea = idea_tick
     idea_tick+=1
@@ -61,11 +73,32 @@ def die(agent,memories):
         Agent id
     memories : list
         List of sets for all the agents
+	
+	Returns
+	-------
+	memories : list
+		Updated list of sets for all the agents
     '''
     memories[agent] = set()
     return memories
 
 def countby(f, seq):
+	'''
+	The countby function is used for the memories. 
+	It takes all the agent's memories and makes a dictionary that tells me how many agents have 1 idea, 2 ideas etc...
+
+	Parameters
+	----------
+	f : ???
+		???
+	seq : ???
+		???
+
+	Returns
+	-------
+	result : ???
+		???
+	'''
     result = {}
     for value in seq:
         key = f(value)
