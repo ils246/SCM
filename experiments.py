@@ -1,5 +1,5 @@
 
-from model0 import sim
+from model0 import model0
 import json
 # from joblib import Parallel, delayed
 # from multiprocessing import cpu_count
@@ -17,9 +17,9 @@ pvals = [(i * 0.05) for i in range(1,21)]
 
 print "Splitting into",n_cores
 for j in range(len(output1)):
-    # rs = Parallel(n_jobs=n_cores)(delayed(sim)([10, i, 0.1, 0.01,
+    # rs = Parallel(n_jobs=n_cores)(delayed(model0)([10, i, 0.1, 0.01,
     # 'complete'],100) for i in pvals)
-    rs = [sim([10, i, 0.1, 0.1, 'complete'],10)  for i in pvals]
+    rs = [model0([10, i, 0.1, 0.1, 'complete'],10)  for i in pvals]
     a = [r[0] for r in rs]
     b = [r[1] for r in rs]
     f = open(output1[j],'w+')
