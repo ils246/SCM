@@ -24,20 +24,19 @@ def talk(agent,memories,G=None):
 		Updated list of sets for all the agents
 	'''
 	N=len(memories)
-	partner = np.random.randint(0,N)
-	# partner = randint(0, N-1)
-	while partner == agent:
-		if G is None:
+	if G is None:
+		partner = np.random.randint(0,N)
+		while partner == agent:
 			partner = np.random.randint(0,N)
+	else:
+		neighs = G.neighbors(agent) #Change this line to upgrade to igraph
+		if len(neighs)!=0:
+			partner = choice(neighs)
 		else:
-			neighs = G.neighbors(agent) #Change this line to upgrade to igraph
-			if len(neighs)!=0:
-				partner = choice(neighs)
-			else:
-				return memories
+			return memories
 	partner = memories[partner]
 	if len(partner) >  0:
-		borrowedIdea = choice(list(partner))
+		borrowedIdea = choice(list(partner)) 
 		memories[agent].add(borrowedIdea)
 	return memories
 
