@@ -25,27 +25,22 @@ def model0(par, ticks):
 	'''
 	N,p,q,beta,gtype = par
 	G = initialize_net(gtype,N)
-
-	pList=[ p ] * N
-	pop = [{'q':q,'p':pList[n],'beta':beta} for n in range(N)] # make three arrays instead of a list because it will save memory
 	memories = [set() for i in range(N)]
-
 	longScm, recordMem, individualMem = [[] for a in range(3)]
 	scm =set()
 	idea_tick=0
 
 	for tick in range(ticks):
 		for agent in np.random.randint(0,N,N):
-			params=pop[agent]
 			myp = random()
-			if myp < params['p']:
+			if myp < p:
 				memories = talk(agent,memories,G=G)
 			else:
 				myq = random()
-				if myq < params['q']:
+				if myq < q:
 					memories,idea_tick = think(agent,memories,idea_tick)
 			b = random()
-			if b < params['beta']:
+			if b < beta:
 				memories = die(agent,memories)
 		tempMem = [len(mem) for mem in memories]
 		individualMem.append(tempMem)
@@ -55,12 +50,11 @@ def model0(par, ticks):
 	return longScm, individualMem
 
 
-
- if __name__ == "__main__":
-	import time
-	print 'Testing model0'
-	start_time = time.time()
-	rs= model0([5000,0.5,0.1,0.1,'complete'],4000)
-	t = open('finaltest.csv', 'w+')
-	t.write("--- %s seconds ---" % (time.time() - start_time))
-	t.close()
+if __name__ == "__main__":
+ 	import time
+ 	print 'Testing model0'
+ 	start_time = time.time()
+ 	rs= model0([5000,0.5,0.1,0.1,'complete'],4000)
+ 	t = open('finaltest.csv', 'w+')
+ 	t.write("--- %s seconds ---" % (time.time() - start_time))
+ 	t.close()
