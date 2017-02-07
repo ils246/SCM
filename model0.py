@@ -27,18 +27,15 @@ def model0(par, ticks):
 	G = initialize_net(gtype,N)
 
 	pList=[ p ] * N
-	pop = [{'q':q,'p':pList[n],'beta':beta} for n in range(N)]
+	pop = [{'q':q,'p':pList[n],'beta':beta} for n in range(N)] # make three arrays instead of a list because it will save memory
 	memories = [set() for i in range(N)]
 
-	longScm = []
-	recordMem = []
-	individualMem = []
+	longScm, recordMem, individualMem = [[] for a in range(3)]
 	scm =set()
 	idea_tick=0
 
 	for tick in range(ticks):
-		for i in range(N):
-			agent = np.random.randint(0,N)
+		for agent in np.random.randint(0,N,N):
 			params=pop[agent]
 			myp = random()
 			if myp < params['p']:
