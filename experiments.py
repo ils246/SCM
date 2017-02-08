@@ -1,25 +1,23 @@
 
 from model0 import model0
 import json
-# from joblib import Parallel, delayed
-# from multiprocessing import cpu_count
-# n_cores = cpu_count()
+from joblib import Parallel, delayed
+from multiprocessing import cpu_count
+n_cores = cpu_count()
 
-output1 = ['CN100-P1-scm%d.csv' % i for i in range(1,10)]
-output2 = ['CN100-P1-mem%d.csv' % i for i in range(1,10)]
+params = [100, i, 0.1, 0.01,'complete']
+ticks = 20000
 
-
-
+#Simulations that do record the memories
+output1 = ['CN100-E1-scm%d.csv' % i for i in range(1,11)]
+output2 = ['CN100-E1-mem%d.csv' % i for i in range(1,11)]
 pvals = [(i * 0.05) for i in range(1,21)]
-#
-# output1 = ['CN100-P1-scm%d.csv' % i for i in range(1,2)]
-# output2 = ['CN100-P1-mem%d.csv' % i for i in range(1,2)]
 
 print "Splitting into",n_cores
 for j in range(len(output1)):
-    # rs = Parallel(n_jobs=n_cores)(delayed(model0)([10, i, 0.1, 0.01,
-    # 'complete'],100) for i in pvals)
-    rs = [model0([10, i, 0.1, 0.1, 'complete'],10)  for i in pvals]
+    rs = Parallel(n_jobs=n_cores)(delayed(model0)
+    (params,ticks) for i in pvals)
+    # rs = [model0([10, i, 0.1, 0.1, 'complete'],10)  for i in pvals]
     a = [r[0] for r in rs]
     b = [r[1] for r in rs]
     f = open(output1[j],'w+')
@@ -35,6 +33,12 @@ for j in range(len(output1)):
     f.close()
 
 
-# for larger N, I will only run 50 sims of each in order to make it faster.
-# Similarly, I will cut down the run time to 4000 ticks. The sim converges around 1000 - 2000
-# depending on the p value, so 4000 ticks should be plenty of time. 
+# Simulations that don't record the memories
+output3 = ['CN100-E1-scm%d.csv' % i for i in range(11,101)]
+for k in range(len(output3)):
+        results = Parallel(n_jobs=n_cores)(delayed(model0)
+        (params,ticks) for i in pvals)
+        c = [r[0] for r in results]
+        p = open(output3[k],'w+')
+        json.dump(c,p)
+        p.close()
