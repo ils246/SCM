@@ -106,12 +106,12 @@ def model1(par, ticks):
 
 if __name__ == "__main__":
 	import time
-	print 'Testing model0'
+	print ('Testing model0')
 	start_time = time.time()
-	rs= model0([100,0.5,0.1,0.1,'complete'],1000)
-	print "--- %s seconds ---" % (time.time() - start_time)
+	rs= model0([2000,0.5,0.1,0.1,'complete'],20000)
+	print ("--- %s seconds ---" % (time.time() - start_time))
 
-	print 'Testing model1'
+	print ('Testing model1')
 	start_time = time.time()
-	rs= model1([100,100*[0.5],100*[0.1],100*[0.1],'complete'],1000)
-	print "--- %s seconds ---" % (time.time() - start_time)
+	rs= model1([2000,2000*[0.5],2000*[0.1],2000*[0.1],'complete'],20000)
+	print ("--- %s seconds ---" % (time.time() - start_time))
