@@ -3,7 +3,7 @@ from functions import talk,think,die,countby,initialize_net
 from random import random,choice
 import numpy as np
 
-def model0(par, ticks):
+def model0(par, ticks,save_every=10):
 	'''
 	Runs Model 0 for the given set of parameters and the given number of timesteps.
 
