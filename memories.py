@@ -15,7 +15,7 @@ output2 = ['CN100-E2-mem-all%d.csv' % i for i in range(1,6)]
 pvals = [(i * 0.05) for i in range(1,21)]
 
 for j in range(len(output1)):
-                          #  N,   ,p, q,  beta,     gtype
+	#  N,   ,p, q,  beta,     gtype
     rs = [model0_memories([100, i, 0.1, 0.001, 'complete'],20000)  for i in pvals]
     a = [r[0] for r in rs]
     b = [r[1] for r in rs]
