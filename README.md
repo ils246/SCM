@@ -30,9 +30,9 @@ Run:
 	experiments.py
 		Script to run the different experiments
 	memories.py
-		???
+		Script to run experiment to for memory analysis. 
 	data-analysis.py
 		Script to analyze the results of the experiments
 	memory-analysis.py
-		???
+		Script to analyze results of experiments run by memories.py
 
