@@ -164,7 +164,7 @@ def heatmap(M,x=None,y=None,title=None,filename=None,labels=('Beta','q'),annotat
     plt.yticks(np.arange(len(y))+0.5, y, ha='right')
     ax.set_frame_on(False)
     if annotate:
-        for i,pp in enumerate(data):
+        for i,pp in enumerate(M):
             for j,p in enumerate(pp):
                 ax.text(j,i, str(p),ha='center', style='italic', size=15)
     if filename is not None:
