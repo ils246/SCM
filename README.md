@@ -1,6 +1,6 @@
 # SCM
 
-Functions:
+Functions:\\
 	functions.py
 		Has building block functions to build models:
 		talk
