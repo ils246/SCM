@@ -5,19 +5,16 @@ import numpy as np
 import glob
 
 
-#         Load data
-#----------------------------
-
-# Returns list of filenames to be analyzed
 def filenames(exp, runNum, N, suffix):
     '''
-    Gets the list of filenames to be analized given the parameters of the experiment.
+    Returns list of filenames to be analyzed given the parameters of the experiment.
 
     Parameters
     -----------
     exp    : int
              Experiment number
-    runNum : Number of iterations for each E / files have consecutive numbers to show iteration
+    runNum : int
+    		 Number of iterations for each E / files have consecutive numbers to show iteration
     N      : int
              Population Size
     suffix : str
@@ -31,11 +28,10 @@ def filenames(exp, runNum, N, suffix):
     filenames = ['CN%d-E%d-%s%d.csv' % (N,exp,suffix, i) for i in range(1,runNum + 1)]
     return filenames
 
-# Takes list of filenamaes and returns an array of arrays
-# Array is Num-of-sims X P-vals X ticks
 def getData(filenames):
     '''
     Takes list of filenames and returns an array of arrays
+	Array is Num-of-sims X P-vals X ticks
 
     Parameters
     -----------
