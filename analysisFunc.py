@@ -125,40 +125,50 @@ def pcurves(pvallist, fig, title, filename):
 #         Heatmap
 #----------------------------
 
-def heatmap(fig, data,title,filename):
+
+def heatmap(M,x=None,y=None,title=None,filename=None,labels=('Beta','q'),annotate=True):
     '''
     Makes heatmap of pvalsues or scm values across experiments.
 
     Parameters
-    -----------
-    fig      : int
-               number of figure
-    data     : list
-               data to be plotted
-    title    : str
-               Title of the plot
-    filename : str
-               Name to save the file
-
-    Returns
-    ------------
-    Heatmap.
+    ----------
+    M : np.array
+        Data organized in a numpy.array.
+        (A list of lists also works)
+    x : list (optional)
+        Tick labels for the x axis
+    y : list (optional)
+        Tick labels for the y axis
+    title : str (optional)
+        Title of the plot
+    filename : str (Optional)
+        If provided, the image will be saved with the given filename
+    labels : tuple (default=('Beta','q'))
+        Labels for the x and y axis.
+    annotate : Boolean (True)
+        If True it will annotate the values of the provided matrix.
     '''
-
-    x = [0.0001, 0.001, 0.01, 0.1]
-    y = [0.1, 0.01, 0.001]
-    plt.figure(fig)
-    plt.imshow(data, cmap='viridis', interpolation='nearest')
+    ys,xs = np.shape(M)
+    x = range(xs) if x is None else x
+    y = range(ys) if y is None else y
+    if (len(x)!=xs)&(len(y)!=ys):
+        raise NameError('Dimension of x and y do not match dimensions of M.')
+    plt.figure()
+    plt.imshow(M, cmap='viridis', interpolation='nearest')
     ax = plt.subplot(111)
-    plt.xlabel('BETA',color='k',size=15, **plotfont)
-    plt.ylabel('Q',color='k',size=16, **plotfont)
-    plt.title(title, **plotfont)
-    plt.xticks(np.arange(len(x))+0.5, x, rotation=0, ha='right', **plotfont)
-    plt.yticks(np.arange(len(y))+0.5, y, rotation=0, ha='right', **plotfont)
+    plt.xlabel(labels[0],color='k',size=15)
+    plt.ylabel(labels[1],color='k',size=16)
+    if title is not None:
+        plt.title(title, **plotfont)
+    plt.xticks(np.arange(len(x))+0.5, x, ha='right')
+    plt.yticks(np.arange(len(y))+0.5, y, ha='right')
     ax.set_frame_on(False)
-    ax.text(1, 2.9, '*Lighter means higher p value', style='italic', size=10, **plotfont, alpha=0.7)
-    plt.savefig(filename, bbox_inches='tight', transparent=True)
-
+    if annotate:
+        for i,pp in enumerate(data):
+            for j,p in enumerate(pp):
+                ax.text(j,i, str(p),ha='center', style='italic', size=15)
+    if filename is not None:
+        plt.savefig(filename, bbox_inches='tight', transparent=True)
 
 #        Memory-SCM gap
 #----------------------------

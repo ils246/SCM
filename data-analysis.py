@@ -1,4 +1,4 @@
-from analysisFunc import filenames,getData,meanScm, meanSimple, pcurves, getmemdata
+from analysisFunc import filenames,getData,meanScm, meanSimple, pcurves, getmemdata,heatmap
 import glob
 import json
 import numpy as np
@@ -64,12 +64,11 @@ g.close()
 plotfont = {'fontname':'Arial Narrow'}
 
 hm_pvalues = json.load(open(glob.glob('max-p.csv')[0]))
-heatmap(10, hm_pvalues, 'Model 0 Heatmap p Values', 'heatmap-pvals.pdf')
-
+heatmap(hm_pvalues,x=[0.0001, 0.001, 0.01, 0.1],y = [0.1, 0.01, 0.001],title='Model 0 Heatmap p Values',filename='heatmap-pvals.pdf')
 
 hm_values = json.load(open(glob.glob('max-val.csv')[0]))
 hm_values = [[log(x) for x in j] for j in hm_values]
-heatmap(11, hm_pvalues, 'Model 0 Heatmap log SCM Values', 'heatmap-scmvals.pdf')
+heatmap(hm_pvalues,x=[0.0001, 0.001, 0.01, 0.1],y = [0.1, 0.01, 0.001],title='Model 0 Heatmap log SCM Values',filename='heatmap-scmvals.pdf')
 
 #       Memories
 #------------------------
