@@ -1,4 +1,4 @@
-from analysisFunc import filenames,getData,meanScm, meanSimple, pcurves, getmemdata,heatmap
+from analysisFunc import filenames,getData,meanScm, pcurves, getmemdata,heatmap
 import glob
 import json
 import numpy as np
@@ -10,31 +10,31 @@ from math import log
 iterations=100
 
 # List of experiements to be analyzed organized by row of heatmap
-rows = [list(i) for i in [range(1,5), range(5,9), range(9,13)]]
+rows = [list(i) for i in [range(26,29), range(29,32), range(32,35)]]
 
 # Names of the files to be analyzed
-# files_row1 = [filenames(i,100,100, 'scm') for i in rows[2]]
+files_row = [filenames(i,100,100, 'scm') for i in range(1,41)]
 
 # Hierarchy of row1:
     #Level0: length=4, items=Experiments
         #Level1: length=100, items=iterations of each Experiment
             #Level2: length=20, items= pvalues
                 #level3: length=2000, items=Collective Memory per tick
-# data_row1 = [getData(i) for i in files_row1]
+data_row = [getData(i) for i in files_row]
 
 # List of the average behavior across the 100 iterations of each Experiment
 # length = number of experiments, in this case 4
-# means_row1 = meanScm(data_row1)
+means_row = meanScm(data_row)
 
 #        P curves
 #------------------------
 # Plot SCM as a function of p
 # Points in the plot are the average of the 100 iterations per experiement
 
-# titles = ['Complete Network - Experiment %d' % i for i in range(5,9)]
-# files = ['E%d.png' % i for i in range(5,9)]
-# for i in range(len(means_row1)):
-#     pcurves(means_row1[i], i, titles[i], files[i])
+titles = ['Random Network - Experiment %d' % i for i in range(32,35)]
+files = ['E%d.pdf' % i for i in range(32,35)]
+for i in range(len(means_row)):
+    pcurves(means_row[i], i, titles[i], files[i])
 
 pvals=[0.05*i for i in range(21)]
 pmax,maxval=[[] for i in range(2)]
@@ -46,7 +46,7 @@ for row in range(len(rows)):
     pmax.append(pmaxr)
     maxvalr = [max(i) for i in means_row]
     maxval.append(maxvalr)
-    titles = ['Complete Network - Experiment %d' % i for i in range(1,len(means_row)+1)]
+    titles = ['Random Network - Experiment %d' % i for i in range(1,len(means_row)+1)]
     files = ['E%d-test.png' % i for i in range(1,len(means_row)+1)]
     for i in range(len(means_row)):
         pcurves(means_row[i], i, titles[i], files[i])
