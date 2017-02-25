@@ -173,40 +173,32 @@ def heatmap(M,x=None,y=None,title=None,filename=None,labels=('Beta','q'),annotat
 #        Memory-SCM gap
 #----------------------------
 
-def plotmemories(list_of_mem, scm, filename, title):
-    '''
-    Takes list of lists of scm per pval.
+def plotmemories(fig,list_of_mem, scm, filename, title):
+        '''
+        Takes list of lists of scm per pval.
 
-    Parameters
-    -----------
-    list_of_mem : list
-                  list of each agent's memories
-    title       : str
-                  Title of the plot
-    filename    : str
-                  Name to save the file
-    scm         : list of social collective memory
+        Parameters
+        -----------
+        list_of_mem : list
+                      list of each agent's memories
+        title       : str
+                      Title of the plot
+        filename    : str
+                      Name to save the file
+        scm         : list of social collective memory
 
-    Returns
-    ------------
-    plot of memories and scm.
-    '''
+        Returns
+        ------------
+        plot of memories and scm.
+        '''
 
-    for i in mems1:
-        plt.plot(i)
-    plt.plot(scm)
+    for i in list_of_mem:
+        plot=plt.figure(fig)
+        ax1=plot.add_subplot(111)
+        ax1.plot(i)
+    ax1.plot(scm)
     plt.title(title)
     plt.xlabel('Time')
     plt.ylabel('Number of Ideas')
     plt.savefig(filename)
-
-
-def memories(memfile, scmfile, pval1,pval2,pval3, title1, title2,title3):
-    mem = json.load(open(glob.glob(memfile)[0]))
-    scm = json.load(open(glob.glob(scmfile)[0]))
-    mems1=[getmemdata(mem,pval1,j) for j in range(100)]
-    mems2=[getmemdata(mem,pval2,j) for j in range(100)]
-    mems3=[getmemdata(mem,pval3,j) for j in range(100)]
-    plotmemories(mems1, scm[pval1], title1 + '.pdf', title1)
-    plotmemories(mems2, scm[pval2], title2 + '.pdf', title2)
-    plotmemories(mems2, scm[pval3], title3 + '.pdf', title3)
+    plt.close()
