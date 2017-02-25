@@ -5,7 +5,7 @@ import numpy as np
 import glob
 
 
-def filenames(exp, runNum, N, suffix):
+def filenames(net,exp, runNum, N, suffix):
     '''
     Returns list of filenames to be analyzed given the parameters of the experiment.
 
