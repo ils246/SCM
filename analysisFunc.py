@@ -17,6 +17,8 @@ def filenames(exp, runNum, N, suffix):
     		 Number of iterations for each E / files have consecutive numbers to show iteration
     N      : int
              Population Size
+    net    : str
+             Network used in the simulation
     suffix : str
             'scm' / 'mem' depending on the output file that is being used
 
@@ -25,7 +27,7 @@ def filenames(exp, runNum, N, suffix):
     filenames: list
                List of filenames to be analyzed.
     '''
-    filenames = ['CN%d-E%d-%s%d.csv' % (N,exp,suffix, i) for i in range(1,runNum + 1)]
+    filenames = ['%sN%d-E%d-%s%d.csv' % (net,N,exp,suffix, i) for i in range(1,runNum + 1)]
     return filenames
 
 def getData(filenames):
@@ -174,24 +176,23 @@ def heatmap(M,x=None,y=None,title=None,filename=None,labels=('Beta','q'),annotat
 #----------------------------
 
 def plotmemories(fig,list_of_mem, scm, filename, title):
-        '''
-        Takes list of lists of scm per pval.
+    '''
+    Takes list of lists of scm per pval.
 
-        Parameters
-        -----------
-        list_of_mem : list
-                      list of each agent's memories
-        title       : str
-                      Title of the plot
-        filename    : str
-                      Name to save the file
-        scm         : list of social collective memory
+    Parameters
+    -----------
+    list_of_mem : list
+                  list of each agent's memories
+    title       : str
+                  Title of the plot
+    filename    : str
+                  Name to save the file
+    scm         : list of social collective memory
 
-        Returns
-        ------------
-        plot of memories and scm.
-        '''
-
+    Returns
+    ------------
+    plot of memories and scm.
+    '''
     for i in list_of_mem:
         plot=plt.figure(fig)
         ax1=plot.add_subplot(111)
