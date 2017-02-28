@@ -207,3 +207,16 @@ def plotmemories(fig,list_of_mem, scm, filename, title):
     plt.ylabel('Number of Ideas')
     plt.savefig(filename)
     plt.close()
+
+
+def getGaps(mems, scms):
+    gaps=[]
+    for j in range(len(mems)):
+        memdata=json.load(open(glob.glob(mems[j])[0]))
+        scmdata=json.load(open(glob.glob(scms[j])[0]))
+        average = [[np.mean(timestep) for timestep in pval] for pval in memdata]
+        average1  = [np.mean(i) for i in average]
+        scmdata1=[np.mean(i) for i in scmdata]
+        gap=[scmdata1[i]-average1[i] for i in range(20)]
+        gaps.append(gap)
+    return gaps
