@@ -46,7 +46,7 @@ def model0(par, ticks,save_every=10):
 				memories = die(agent,memories)
 		tempMem = [len(mem) for mem in memories]
 		individualMem.append(tempMem)
-		if (save_every == 0)|(tick % save_every == 0):
+		if save_every == 0 or tick % save_every == 0:
 			scm = set(itertools.chain.from_iterable(memories))
 			longScm.append(len(scm))
 	return longScm, individualMem
@@ -104,13 +104,6 @@ def model1(par, ticks):
 			scm = set(itertools.chain.from_iterable(memories))
 			longScm.append(len(scm))
 	return longScm, individualMem
-
-
-def model0_memories(par, ticks):
-	'''
-	Runs Model 0, needs to be deprecated.
-	'''
-	return model0(par, ticks,save_every=0)
 
 
 if __name__ == "__main__":
