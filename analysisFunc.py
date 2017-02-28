@@ -5,7 +5,7 @@ import numpy as np
 import glob
 
 
-def filenames(net,exp, runNum, N, suffix):
+def filenames(net,exp, runNum, N, suffix, mem):
     '''
     Returns list of filenames to be analyzed given the parameters of the experiment.
 
@@ -21,14 +21,18 @@ def filenames(net,exp, runNum, N, suffix):
              Network used in the simulation
     suffix : str
             'scm' / 'mem' depending on the output file that is being used
-
+    mem    : bool
+            'True' /'False' depending on the names of files requiered. Files for agent memory analysis start with 'M'
     Returns
     ------------
     filenames: list
                List of filenames to be analyzed.
     '''
-    filenames = ['%sN%d-E%d-%s%d.csv' % (net,N,exp,suffix, i) for i in range(1,runNum + 1)]
-    return filenames
+    if mem:
+        return ['M%sN%d-E%d-%s%d.csv' % (net,N,exp,suffix, i) for i in range(1,runNum + 1)]
+    else:
+        return ['%sN%d-E%d-%s%d.csv' % (net,N,exp,suffix, i) for i in range(1,runNum + 1)]
+
 
 def getData(filenames):
     '''
