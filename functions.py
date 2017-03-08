@@ -1,6 +1,6 @@
 from random import randint,choice
 from collections import Counter
-from networkx import gnp_random_graph,barabasi_albert_graph,star_graph
+from networkx import barabasi_albert_graph,star_graph,connected_watts_strogatz_graph,erdos_renyi_graph
 import numpy as np
 
 def talk(agent,memories,G=None):
@@ -36,7 +36,7 @@ def talk(agent,memories,G=None):
 			return memories
 	partner = memories[partner]
 	if len(partner) >  0:
-		borrowedIdea = choice(list(partner)) 
+		borrowedIdea = choice(list(partner))
 		memories[agent].add(borrowedIdea)
 	return memories
 
@@ -123,13 +123,14 @@ def initialize_net(gtype,N):
 		Graph object of the desired network.
 	'''
 	if gtype=='random':
-		r = 4/N
-		G = gnp_random_graph(N,r)
+		G = erdos_renyi_graph(N,0.04)
 	elif gtype=='scale-free':
 		m = 30
 		G = barabasi_albert_graph(N,m)
 	elif gtype=='star':
 		G = star_graph(N)
+	elif gtype=='sw':
+		G = connected_watts_strogatz_graph(N,4,0.005)
 	else:
 		G=None
 	return G
