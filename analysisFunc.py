@@ -4,6 +4,8 @@ import json
 import numpy as np
 import glob
 
+plotfont = {'fontname':'Arial Narrow'}
+
 
 def filenames(net,exp, runNum, N, suffix, mem):
     '''
@@ -50,7 +52,7 @@ def getData(filenames):
     '''
     aux1 = []
     for f in filenames:
-        # f = 'model0-data/model0-data/'+f
+        f = '/Volumes/Isabella/SCM/model0/RN100/'+f
         data = json.load(open(glob.glob(f)[0]))
         aux1.append(data)
     return aux1
@@ -127,12 +129,13 @@ def pcurves(pvallist, fig, title, filename):
     plt.yticks(size=11,**plotfont)
     plt.title(title, **plotfont)
     plt.savefig(filename, bbox_inches='tight')
+    plt.close()
 
 #         Heatmap
 #----------------------------
 
 
-def heatmap(M,x=None,y=None,title=None,filename=None,labels=('Beta','q'),annotate=True):
+def heatmap(M,x=None,y=None,title=None,filename=None,labels=('Beta','Q'),annotate=True):
     '''
     Makes heatmap of pvalsues or scm values across experiments.
 
@@ -162,17 +165,17 @@ def heatmap(M,x=None,y=None,title=None,filename=None,labels=('Beta','q'),annotat
     plt.figure()
     plt.imshow(M, cmap='viridis', interpolation='nearest')
     ax = plt.subplot(111)
-    plt.xlabel(labels[0],color='k',size=15)
-    plt.ylabel(labels[1],color='k',size=16)
+    plt.xlabel(labels[0],color='k',size=14,**plotfont)
+    plt.ylabel(labels[1],color='k',size=14, **plotfont)
     if title is not None:
         plt.title(title, **plotfont)
-    plt.xticks(np.arange(len(x))+0.5, x, ha='right')
-    plt.yticks(np.arange(len(y))+0.5, y, ha='right')
+    plt.xticks(np.arange(len(x)), x, ha='center', **plotfont)
+    plt.yticks(np.arange(len(y)), y, ha='right', **plotfont)
     ax.set_frame_on(False)
     if annotate:
         for i,pp in enumerate(M):
             for j,p in enumerate(pp):
-                ax.text(j,i, str(p),ha='center', style='italic', size=15)
+                ax.text(j,i, str(round(p,2)),ha='center', style='italic', size=15, **plotfont)
     if filename is not None:
         plt.savefig(filename, bbox_inches='tight', transparent=True)
 
