@@ -52,7 +52,7 @@ def model0(par, ticks,save_every=10):
 	return longScm, individualMem
 
 
-def model1(par, ticks):
+def model1(par, ticks, top, save_every=10):
 	'''
 	Runs Model 1 for the given set of parameters and the given number of timesteps.
 
@@ -73,11 +73,9 @@ def model1(par, ticks):
 		List of lists.
 		It contains the lengths of the individual memories as a function of time.
 	'''
-	N,p,q,beta,gtype = par
-	pList = p if hasattr(p,'__getitem__') else None
-	qList = q if hasattr(q,'__getitem__') else None
-	bList = beta if hasattr(beta,'__getitem__') else None
+	N,pStar,pHubs,q,beta,gtype = par
 	G = initialize_net(gtype,N)
+	ps = set_hubs(G,N,pStar,pHubs,top)
 	memories = [set() for i in range(N)]
 	longScm, recordMem, individualMem = [[] for a in range(3)]
 	scm =set()
@@ -86,21 +84,18 @@ def model1(par, ticks):
 	for tick in range(ticks):
 		for agent in np.random.randint(0,N,N):
 			myp = random()
-			p = p if pList is None else pList[agent]
-			if myp < p:
+			if myp < ps[agent]:
 				memories = talk(agent,memories,G=G)
 			else:
 				myq = random()
-				q = q if qList is None else qList[agent]
 				if myq < q:
 					memories,idea_tick = think(agent,memories,idea_tick)
-			beta = beta if bList is None else bList[agent]
 			b = random()
 			if b < beta:
 				memories = die(agent,memories)
 		tempMem = [len(mem) for mem in memories]
 		individualMem.append(tempMem)
-		if tick % 10 == 0:
+		if save_every == 0 or tick % save_every == 0:
 			scm = set(itertools.chain.from_iterable(memories))
 			longScm.append(len(scm))
 	return longScm, individualMem
