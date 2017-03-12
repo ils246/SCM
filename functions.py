@@ -1,7 +1,8 @@
+import numpy as np
 from random import randint,choice
 from collections import Counter
-from networkx import barabasi_albert_graph,star_graph,connected_watts_strogatz_graph,erdos_renyi_graph
-import numpy as np
+from networkx import barabasi_albert_graph,star_graph,connected_watts_strogatz_graph,erdos_renyi_graph,degree
+from operator import itemgetter
 
 def talk(agent,memories,G=None):
 	'''
@@ -134,3 +135,11 @@ def initialize_net(gtype,N):
 	else:
 		G=None
 	return G
+
+def set_hubs(G,N,pStar,pHubs,top):
+	ps = [pStar]*N
+	t=int(N*(top/100))
+	topDegrees=sorted(G.degree().items(), key=itemgetter(1), reverse=True)[:t]
+	for i in topDegrees:
+		ps[i[0]]= pHubs
+	return ps
