@@ -136,21 +136,19 @@ def initialize_net(gtype,N):
 		G=None
 	return G
 
-def set_hubs(G,N,pStar,pHubs,top):
+def set_hubs(G,pStar,pHubs,top):
 	'''
 	Given a sequence, it applies function f (len) and then counts each occurence.
 
 	Parameters
 	----------
 	G  : networkx.Graph
-	N  : int
-		Number of nodes in the network
 	pStar: float
 		 p value for all the nodes that are not hubs
 	pHubs: float
 	     p value for hubs
-	top : int
-		number of hubs for which pHubs is going to be assigned to
+	top : float
+		Fracion of nodes top nodes to assing pHubs
 		takes top hubs based on degree
 
 	Returns
@@ -158,8 +156,9 @@ def set_hubs(G,N,pStar,pHubs,top):
 	ps : list
 		List with pvalues for all nodes in the network 
 	'''
+	N = len(G)
 	ps = [pStar]*N
-	t=int(N*(top/100))
+	t=int(N*top)
 	topDegrees=sorted(G.degree().items(), key=itemgetter(1), reverse=True)[:t]
 	for i in topDegrees:
 		ps[i[0]]= pHubs
