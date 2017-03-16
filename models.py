@@ -3,7 +3,7 @@ from functions import talk,think,die,countby,initialize_net
 from random import random,choice
 import numpy as np
 
-def _master(par, ticks,G=None, save_every=10,save_individual=True):
+def _master(par, ticks,G=None, save_every=10,save_individual=False):
 	'''
 	Master function to run all models.
 
@@ -123,7 +123,7 @@ def model1(par, ticks, save_every=10,save_individual=True):
 		List of lists.
 		It contains the lengths of the individual memories as a function of time.
 	'''
-	if len(par)!=5:
+	if len(par)!=7:
 		raise NameError('Parameters must be N,pStar,pHubs,q,beta,gtype,top')
 	N,pStar,pHubs,q,beta,gtype,top = par
 	G = initialize_net(gtype,N)
