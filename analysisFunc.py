@@ -179,6 +179,59 @@ def heatmap(M,x=None,y=None,title=None,filename=None,labels=('Beta','Q'),annotat
     if filename is not None:
         plt.savefig(filename, bbox_inches='tight', transparent=True)
 
+#           Model 1
+#--------------------------------
+
+def model1_getdata(net, exp, hubs):
+
+    '''
+    Makes heatmap of the difference between model 0 and model1 across the 9 worlds under study.
+    Makes file with the mean SCM across the 9 worlds under study.
+
+    Parameters:
+    -----------
+    net  : str
+          Network type for which data is being analyzed ('S' - scale-free, 'R'- random)
+    exp  : tuple
+          Range of experiment numbers, non inclusive of last number
+    hubs: int
+         Number of hubs that have higher p
+
+    Returns:
+    --------
+    file with mean SCM across the 9 worlds for a number of hubs.
+    file with variances of SCM across the 9 worlds for a number of hubs.
+    file with differences between mean SCM in model 1 and max SCM in model 0
+    across the 9 worlds for a number of hubs.
+    heatmap of differences across the 9 worlds.
+    '''
+    filenames = ['%sN100-E%d-scm%d.csv' % (net,i,hubs) for i in range(exp[0],exp[1])]
+    m1,variances=[[] for i in range(2)]
+    for i in filenames:
+        data=json.load(open(glob.glob(i)[0]))
+        m = [np.mean(i[500:]) for i in data]
+        means = np.mean(m)
+        var = pvariance(m)
+        m1.append(means)
+        variances.append(var)
+    f=open('s-means-%d.csv' % hubs, 'w+')
+    json.dump(m1,f)
+    f.close()
+    g=open('s-variance-%d.csv' % hubs, 'w+')
+    json.dump(var,g)
+    g.close()
+
+    m0_data=json.load(open(glob.glob('S-max-val.csv')[0]))
+    m0=[item for sublist in m0_data for item in sublist]
+    diff=[m1[i]-m0[i] for i in range(len(m1))]
+    diff_array=[[diff[0+i],diff[1+i], diff[2+i]] for i in range(0,9,3)]
+    heatmap(diff_array,x=[0.001, 0.01, 0.1],y=[0.1, 0.01, 0.001],title='Differences between M0 and M1 (%s% of hubs)' % hubs, filename='s-diff%d.png' % hubs)
+
+    f=open('diff%d.csv' % hubs, 'w+')
+    json.dump(diff,f)
+    f.close()
+
+
 #        Memory-SCM gap
 #----------------------------
 
