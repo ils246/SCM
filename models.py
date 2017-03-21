@@ -1,5 +1,5 @@
 import itertools
-from functions import talk,think,die,countby,initialize_net
+from functions import talk,think,die,countby,initialize_net,set_hubs
 from random import random,choice
 import numpy as np
 
@@ -65,7 +65,7 @@ def _master(par, ticks,G=None, save_every=10,save_individual=False):
 	else:
 		return longScm,None
 
-def model0(par, ticks,save_every=10,save_individual=True):
+def model0(par, ticks,save_every=10,save_individual=False):
 	'''
 	Runs Model 0 for the given set of parameters and the given number of timesteps.
 
@@ -99,7 +99,7 @@ def model0(par, ticks,save_every=10,save_individual=True):
 	return longScm, individualMem
 
 
-def model1(par, ticks, save_every=10,save_individual=True):
+def model1(par, ticks, save_every=10,save_individual=False):
 	'''
 	Runs Model 1 for the given set of parameters and the given number of timesteps.
 
@@ -128,7 +128,7 @@ def model1(par, ticks, save_every=10,save_individual=True):
 	N,pStar,pHubs,q,beta,gtype,top = par
 	G = initialize_net(gtype,N)
 	ps = set_hubs(G,pStar,pHubs,top)
-	longScm, individualMem = _master((N,p,q,beta), ticks,G=G, save_every=save_every,save_individual=save_individual)
+	longScm, individualMem = _master((N,ps,q,beta), ticks,G=G, save_every=save_every,save_individual=save_individual)
 	return longScm, individualMem
 
 def model0_old(par, ticks,save_every=10):
