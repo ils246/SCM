@@ -6,7 +6,6 @@ import glob
 
 plotfont = {'fontname':'Arial Narrow'}
 
-
 def filenames(net,exp, runNum, N, suffix, mem):
     '''
     Returns list of filenames to be analyzed given the parameters of the experiment.
@@ -199,11 +198,11 @@ def model1_getdata(net, exp, hubs):
 
     Returns:
     --------
-    file with mean SCM across the 9 worlds for a number of hubs.
+    File with mean SCM across the 9 worlds for a number of hubs.
     file with variances of SCM across the 9 worlds for a number of hubs.
-    file with differences between mean SCM in model 1 and max SCM in model 0
+    File with differences between mean SCM in model 1 and max SCM in model 0
     across the 9 worlds for a number of hubs.
-    heatmap of differences across the 9 worlds.
+    Heatmap of differences across the 9 worlds.
     '''
     filenames = ['%sN100-E%d-scm%d.csv' % (net,i,hubs) for i in range(exp[0],exp[1])]
     m1,variances=[[] for i in range(2)]
