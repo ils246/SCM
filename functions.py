@@ -262,13 +262,15 @@ def getGaps(mems, scms):
         gaps.append(gap)
     return gaps
 
-def get_diff_data(range_of_hubs):
+def get_diff_data(net,range_of_hubs):
     '''
     Retrives  and organizes model 1 data so that it is possible to see the performance of the model across
     different number of hubs for all 9 worlds.
 
     Parameters:
     -----------
+	net : str
+	     String that describes the type of network (S-scale-free, R-random)
     range_of_hubs: function (range())
                   range of integers for which number of nodes was tested in model 1
     Returns:
@@ -452,7 +454,7 @@ def heatmap_of_hubs(net, range_of_hubs):
     --------
     Heatmap.
     '''
-    sc=get_diff_data(range_of_hubs)
+    sc=get_diff_data(net,range_of_hubs)
     hubs=list(range_of_hubs)
     maxhubs=[hubs[i.index(max(i))] for i in sc]
     maxhubs_array=[[maxhubs[0+i],maxhubs[1+i], maxhubs[2+i]] for i in range(0,9,3)]
