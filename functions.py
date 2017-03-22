@@ -290,7 +290,7 @@ def pcurves(pvallist, fig, title, filename):
     plt.figure(fig)
     plt.plot(pvallist, 'bo')
     plt.xlabel('P values',size=14, **plotfont)
-    plt.ylabel('Social Collective Memory',size =14. **plotfont)
+    plt.ylabel('Social Collective Memory',size =14, **plotfont)
     plt.xticks(range(21), [round((0.05*i),2) for i in range(1,21)], size=14,**plotfont)
     plt.yticks(size=14,**plotfont)
     plt.title(title,size=16, **plotfont)
@@ -376,22 +376,21 @@ def model1_getdata(net, exp, hubs):
         var = pvariance(m)
         m1.append(means)
         variances.append(var)
-
     m0_data=json.load(open(glob.glob('S-max-val.csv')[0]))
     m0=[item for sublist in m0_data for item in sublist]
     diff=[m1[i]-m0[i] for i in range(len(m1))]
     diff_array=[[diff[0+i],diff[1+i], diff[2+i]] for i in range(0,9,3)]
     heatmap(diff_array,x=[0.001, 0.01, 0.1],y=[0.1, 0.01, 0.001],title='Differences between M0 and M1 (%s% of hubs)' % hubs, filename='s-diff%d.png' % hubs)
 
-	f=open('s-means-%d.csv' % hubs, 'w+')
-    json.dump(m1,f)
-    f.close()
-    g=open('s-variance-%d.csv' % hubs, 'w+')
-    json.dump(var,g)
-    g.close()
-    k=open('diff%d.csv' % hubs, 'w+')
-    json.dump(diff,k)
-    k.close()
+	# f=open('s-means-%d.csv' % hubs, 'w+')
+	# json.dump(m1,f)
+    # f.close()
+    # g=open('s-variance-%d.csv' % hubs, 'w+')
+    # json.dump(var,g)
+    # g.close()
+    # k=open('diff%d.csv' % hubs, 'w+')
+    # json.dump(diff,k)
+    # k.close()
 
 def plotmemories(fig,list_of_mem, scm, filename, title):
     '''
