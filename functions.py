@@ -3,6 +3,7 @@ from random import randint,choice
 from collections import Counter
 from networkx import barabasi_albert_graph,star_graph,connected_watts_strogatz_graph,erdos_renyi_graph,degree
 from operator import itemgetter
+from statistics import pvariance
 import matplotlib.pyplot as plt
 import json
 import glob
@@ -13,164 +14,164 @@ import glob
 #---------------------------------------
 
 def talk(agent,memories,G=None):
-	'''
-	Selects a random partner for agent to get a new idea from.
-	(agent gets idea from partner, not the other way around)
-	If G is provided, then it chooses a partner from the network.
+    '''
+    Selects a random partner for agent to get a new idea from.
+    (agent gets idea from partner, not the other way around)
+    If G is provided, then it chooses a partner from the network.
 
-	Parameters
-	----------
-	agent : int
-		Agent id
-	memories : list
-		List of sets for all the agents
-	G : networkx.Graph (optional)
-		Network of connections between agents
+    Parameters
+    ----------
+    agent : int
+        Agent id
+    memories : list
+        List of sets for all the agents
+    G : networkx.Graph (optional)
+        Network of connections between agents
 
-	Returns
-	-------
-	memories : list
-		Updated list of sets for all the agents
-	'''
-	N=len(memories)
-	if G is None:
-		partner = np.random.randint(0,N)
-		while partner == agent:
-			partner = np.random.randint(0,N)
-	else:
-		neighs = G.neighbors(agent)
-		if len(neighs)!=0:
-			partner = choice(neighs)
-		else:
-			return memories
-	partner = memories[partner]
-	if len(partner) >  0:
-		borrowedIdea = choice(list(partner))
-		memories[agent].add(borrowedIdea)
-	return memories
+    Returns
+    -------
+    memories : list
+        Updated list of sets for all the agents
+    '''
+    N=len(memories)
+    if G is None:
+        partner = np.random.randint(0,N)
+        while partner == agent:
+            partner = np.random.randint(0,N)
+    else:
+        neighs = G.neighbors(agent)
+        if len(neighs)!=0:
+            partner = choice(neighs)
+        else:
+            return memories
+    partner = memories[partner]
+    if len(partner) >  0:
+        borrowedIdea = choice(list(partner))
+        memories[agent].add(borrowedIdea)
+    return memories
 
 def think(agent,memories,idea_tick):
-	'''
-	Adds a new idea to the memory of agent.
-	(Successfully think)
+    '''
+    Adds a new idea to the memory of agent.
+    (Successfully think)
 
-	Parameters
-	----------
-	agent : int
-		Agent id
-	memories : list
-		List of sets for all the agents
-	idea_tick : int
-		Keeps track of the id of the last created idea
+    Parameters
+    ----------
+    agent : int
+        Agent id
+    memories : list
+        List of sets for all the agents
+    idea_tick : int
+        Keeps track of the id of the last created idea
 
-	Returns
-	-------
-	memories : list
-		Updated list of sets for all the agents
-	idea_tick : int
-		Updated counter that keeps track of the id of the last created idea
-	'''
-	newIdea = idea_tick
-	idea_tick+=1
-	memories[agent].add(newIdea)
-	return memories,idea_tick
+    Returns
+    -------
+    memories : list
+        Updated list of sets for all the agents
+    idea_tick : int
+        Updated counter that keeps track of the id of the last created idea
+    '''
+    newIdea = idea_tick
+    idea_tick+=1
+    memories[agent].add(newIdea)
+    return memories,idea_tick
 
 def die(agent,memories):
-	'''
-	Sets the memory of agent to an empty set.
+    '''
+    Sets the memory of agent to an empty set.
 
-	Parameters
-	----------
-	agent : int
-		Agent id
-	memories : list
-		List of sets for all the agents
+    Parameters
+    ----------
+    agent : int
+        Agent id
+    memories : list
+        List of sets for all the agents
 
-	Returns
-	-------
-	memories : list
-		Updated list of sets for all the agents
-	'''
-	memories[agent] = set()
-	return memories
+    Returns
+    -------
+    memories : list
+        Updated list of sets for all the agents
+    '''
+    memories[agent] = set()
+    return memories
 
 def countby(seq,f=len):
-	'''
-	Given a sequence, it applies function f (len) and then counts each occurence.
+    '''
+    Given a sequence, it applies function f (len) and then counts each occurence.
 
-	Parameters
-	----------
-	seq : list
-		List of elements to which apply f to
-	f : function (default=len)
-		Function to apply to each one of elements in seq
+    Parameters
+    ----------
+    seq : list
+        List of elements to which apply f to
+    f : function (default=len)
+        Function to apply to each one of elements in seq
 
-	Returns
-	-------
-	result : dict
-		Number of occurences of the key value.
-	'''
-	result = Counter([f(value) for value in seq])
+    Returns
+    -------
+    result : dict
+        Number of occurences of the key value.
+    '''
+    result = Counter([f(value) for value in seq])
 
-	return result
+    return result
 
 
 def initialize_net(gtype,N):
-	'''
-	Initializes the network to be used in the simulation.
+    '''
+    Initializes the network to be used in the simulation.
 
-	Parameters
-	----------
-	gtype : str
-		Graph type, can be random, scale-free, or star.
-	N : int
-		Number of nodes in the network.
+    Parameters
+    ----------
+    gtype : str
+        Graph type, can be random, scale-free, or star.
+    N : int
+        Number of nodes in the network.
 
-	Returns
-	-------
-	G : networkx.Graph
-		Graph object of the desired network.
-	'''
-	if gtype=='random':
-		G = erdos_renyi_graph(N,0.04)
-	elif gtype=='scale-free':
-		m = 30
-		G = barabasi_albert_graph(N,m)
-	elif gtype=='star':
-		G = star_graph(N)
-	elif gtype=='sw':
-		G = connected_watts_strogatz_graph(N,4,0.005)
-	else:
-		G=None
-	return G
+    Returns
+    -------
+    G : networkx.Graph
+        Graph object of the desired network.
+    '''
+    if gtype=='random':
+        G = erdos_renyi_graph(N,0.04)
+    elif gtype=='scale-free':
+        m = 30
+        G = barabasi_albert_graph(N,m)
+    elif gtype=='star':
+        G = star_graph(N)
+    elif gtype=='sw':
+        G = connected_watts_strogatz_graph(N,4,0.005)
+    else:
+        G=None
+    return G
 
 def set_hubs(G,pStar,pHubs,top):
-	'''
-	Given a sequence, it applies function f (len) and then counts each occurence.
+    '''
+    Given a sequence, it applies function f (len) and then counts each occurence.
 
-	Parameters
-	----------
-	G  : networkx.Graph
-	pStar: float
-		 p value for all the nodes that are not hubs
-	pHubs: float
-	     p value for hubs
-	top : float
-		Fracion of nodes top nodes to assing pHubs
-		takes top hubs based on degree
+    Parameters
+    ----------
+    G  : networkx.Graph
+    pStar: float
+         p value for all the nodes that are not hubs
+    pHubs: float
+         p value for hubs
+    top : float
+        Fracion of nodes top nodes to assing pHubs
+        takes top hubs based on degree
 
-	Returns
-	-------
-	ps : list
-		List with pvalues for all nodes in the network
-	'''
-	N = len(G)
-	ps = [pStar]*N
-	t=int(N*top)
-	topDegrees=sorted(G.degree().items(), key=itemgetter(1), reverse=True)[:t]
-	for i in topDegrees:
-		ps[i[0]]= pHubs
-	return ps
+    Returns
+    -------
+    ps : list
+        List with pvalues for all nodes in the network
+    '''
+    N = len(G)
+    ps = [pStar]*N
+    t=int(N*top)
+    topDegrees=sorted(G.degree().items(), key=itemgetter(1), reverse=True)[:t]
+    for i in topDegrees:
+        ps[i[0]]= pHubs
+    return ps
 
 
 #---------------------------------------
@@ -188,7 +189,7 @@ def filenames(net,exp, runNum, N, suffix, mem):
     exp    : int
              Experiment number
     runNum : int
-    		 Number of iterations for each E / files have consecutive numbers to show iteration
+             Number of iterations for each E / files have consecutive numbers to show iteration
     N      : int
              Population Size
     net    : str
@@ -210,7 +211,7 @@ def filenames(net,exp, runNum, N, suffix, mem):
 def getData(filenames):
     '''
     Takes list of filenames and returns an array of arrays
-	Array is Num-of-sims X P-vals X ticks
+    Array is Num-of-sims X P-vals X ticks
 
     Parameters
     -----------
@@ -261,6 +262,24 @@ def getGaps(mems, scms):
         gaps.append(gap)
     return gaps
 
+def get_diff_data(range_of_hubs):
+    '''
+    Retrives  and organizes model 1 data so that it is possible to see the performance of the model across
+    different number of hubs for all 9 worlds.
+
+    Parameters:
+    -----------
+    range_of_hubs: function (range())
+                  range of integers for which number of nodes was tested in model 1
+    Returns:
+    --------
+    sc: list of lists
+        list of mean SCM across the range number of hubs
+    '''
+    filenames=['%s-diff%d.csv' % (net,i) for i in range_of_hubs]
+    data=[json.load(open(glob.glob(i)[0])) for i in filenames]
+    sc=[[data[i][j] for i in range(len(data))] for j in range(len(data[0]))]
+    return sc
 
 #---------------------------------------
 #       Functions for plotting
@@ -286,14 +305,15 @@ def pcurves(pvallist, fig, title, filename):
     ------------
     plot of pvalist.
     '''
+    ax=plt.subplot(111)
     plotfont = {'fontname':'Arial Narrow'}
-    plt.figure(fig)
-    plt.plot(pvallist, 'bo')
+    plt.plot(pvallist, 'o', markersize=8.5, markeredgecolor='b', markeredgewidth=0.0, color='#28289A')
     plt.xlabel('P values',size=14, **plotfont)
-    plt.ylabel('Social Collective Memory',size =14, **plotfont)
-    plt.xticks(range(21), [round((0.05*i),2) for i in range(1,21)], size=14,**plotfont)
-    plt.yticks(size=14,**plotfont)
-    plt.title(title,size=16, **plotfont)
+    plt.ylabel('Social Collective Memory',size =15, **plotfont)
+    # plt.locator_params(axis='x', nticks=5)
+    plt.xticks(range(20), [round((0.05*i),2) for i in range(1,21)], size=13, **plotfont)
+    plt.yticks(size=15,**plotfont)
+    plt.title(title,size=17, **plotfont)
     plt.savefig(filename, bbox_inches='tight')
     plt.close()
 
@@ -344,11 +364,10 @@ def heatmap(M,x=None,y=None,title=None,filename=None,labels=('Beta','Q'),annotat
 
 
 def model1_getdata(net, exp, hubs):
-
     '''
     Makes heatmap of the difference between model 0 and model1 across the 9 worlds under study.
     Makes file with the mean SCM across the 9 worlds under study.
-	Makes file with the variance of SCM across the  worlds under study.
+    Makes file with the variance of SCM across the  worlds under study.
 
     Parameters:
     -----------
@@ -370,6 +389,7 @@ def model1_getdata(net, exp, hubs):
     filenames = ['%sN100-E%d-scm%d.csv' % (net,i,hubs) for i in range(exp[0],exp[1])]
     m1,variances=[[] for i in range(2)]
     for i in filenames:
+        # i='/Volumes/Isabella/SCM/model1/round2_500/'+i
         data=json.load(open(glob.glob(i)[0]))
         m = [np.mean(i[500:]) for i in data]
         means = np.mean(m)
@@ -380,17 +400,64 @@ def model1_getdata(net, exp, hubs):
     m0=[item for sublist in m0_data for item in sublist]
     diff=[m1[i]-m0[i] for i in range(len(m1))]
     diff_array=[[diff[0+i],diff[1+i], diff[2+i]] for i in range(0,9,3)]
-    heatmap(diff_array,x=[0.001, 0.01, 0.1],y=[0.1, 0.01, 0.001],title='Differences between M0 and M1 (%s% of hubs)' % hubs, filename='s-diff%d.png' % hubs)
+    heatmap(diff_array,x=[0.001, 0.01, 0.1],y=[0.1, 0.01, 0.001],title='Differences between M0 and M1 (%d of hubs)' % hubs, filename='%s-diff%d.png' % (net,hubs))
 
-	# f=open('s-means-%d.csv' % hubs, 'w+')
-	# json.dump(m1,f)
-    # f.close()
-    # g=open('s-variance-%d.csv' % hubs, 'w+')
-    # json.dump(var,g)
-    # g.close()
-    # k=open('diff%d.csv' % hubs, 'w+')
-    # json.dump(diff,k)
-    # k.close()
+    f=open('%s-means-%d.csv' % (net,hubs), 'w+')
+    json.dump(m1,f)
+    f.close()
+    g=open('%s-variance-%d.csv' % (net,hubs), 'w+')
+    json.dump(var,g)
+    g.close()
+    k=open('%s-diff%d.csv' % (net,hubs), 'w+')
+    json.dump(diff,k)
+    k.close()
+
+def compare_model_means(net, range_hubs):
+    lgd=[]
+    filenames=['%s-means-%d.csv' % (net,i) for i in range(range_hubs[0],range_hubs[1])]
+    worlds=['Model 1: Mean SCM across number of hubs - World %i' % i for i in range(1,10)]
+    data=[json.load(open(glob.glob(i)[0])) for i in filenames]
+    sc=[[data[i][j] for i in range(len(data))] for j in range(len(data[0]))]
+    m0_data=json.load(open(glob.glob('S-max-val.csv')[0]))
+    m0=[item for sublist in m0_data for item in sublist]
+    for i in range(len(sc)):
+        plt.plot(sc[i], marker='o', label='model 1', ls='--', lw=0.5, color='#28289A')
+        plt.plot([m0[i]]*len(sc[0]),'--' ,color='#8c8c9a',lw=2,label='model 0')
+        l=plt.legend(loc=9, bbox_to_anchor=(0.5, -0.134), ncol=2)
+        plt.xticks(range(0,(range_hubs[1]-range_hubs[0])), range(range_hubs[0],range_hubs[1]), size=13,**plotfont)
+        plt.yticks(**plotfont,size=14)
+        plt.xlabel('Number of hubs with higher p', size=16,**plotfont)
+        plt.ylabel('SCM',size=14, **plotfont)
+        plt.title(worlds[i],size=17, **plotfont)
+        ax = plt.gca()
+        ax.xaxis.set_label_coords(0.5, -0.09)
+        leg = ax.get_legend()
+        # leg.draw_frame(False)
+        lgd.append(l)
+        plt.savefig('%s-values-world%d.png' % (net,i+1), additional_artists=lgd,bbox_inches="tight")
+        plt.close()
+
+def heatmap_of_hubs(net, range_of_hubs):
+    '''
+    Makes heatmap that shows the number of hubs with higher p that maximizes SCM across
+    all 9 worlds in model 1.
+
+    Parameters:
+    -----------
+    net  : str
+          String that describes the type of network (S-scale-free, R-random).
+    range_of_hubs: function (range())
+          Range of integers for which number of nodes was tested in model 1.
+    Returns:
+    --------
+    Heatmap.
+    '''
+    sc=get_diff_data(range_of_hubs)
+    hubs=list(range_of_hubs)
+    maxhubs=[hubs[i.index(max(i))] for i in sc]
+    maxhubs_array=[[maxhubs[0+i],maxhubs[1+i], maxhubs[2+i]] for i in range(0,9,3)]
+    heatmap(maxhubs_array,x=[0.001, 0.01, 0.1],y=[0.1, 0.01, 0.001],title='Number of hubs to maximize distance from Model 0', filename='%s-heatmap-hubs.png' % net)
+
 
 def plotmemories(fig,list_of_mem, scm, filename, title):
     '''
