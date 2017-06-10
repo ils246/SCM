@@ -2,8 +2,9 @@ import itertools
 from functions import talk,think,die,countby,initialize_net,set_hubs
 from random import random,choice
 import numpy as np
+# from statistics import pvariance
 
-def _master(par, ticks,G=None, save_every=10,save_individual=False):
+def _master(par, ticks,G=None, save_every=10,save_individual=True):
 	'''
 	Master function to run all models.
 
@@ -36,7 +37,7 @@ def _master(par, ticks,G=None, save_every=10,save_individual=False):
 	qList = q if hasattr(q,'__getitem__') else None
 	bList = beta if hasattr(beta,'__getitem__') else None
 	memories = [set() for i in range(N)]
-	longScm, recordMem, individualMem = [[] for a in range(3)]
+	longScm, recordMem, individualMem, median_mem_tick, var_mem_tick = [[] for a in range(5)]
 	scm =set()
 	idea_tick=0
 	for tick in range(ticks):
@@ -55,17 +56,21 @@ def _master(par, ticks,G=None, save_every=10,save_individual=False):
 			if b < beta:
 				memories = die(agent,memories)
 		tempMem = [len(mem) for mem in memories]
+		medianMemTick = np.median(tempMem)
+		# memvariance = pvariance(tempMem)
 		if save_individual:
 			individualMem.append(tempMem)
+			median_mem_tick.append(medianMemTick)
+			# var_mem_tick.append(memvariance)
 		if save_every == 0 or tick % save_every == 0:
 			scm = set(itertools.chain.from_iterable(memories))
 			longScm.append(len(scm))
 	if save_individual:
-		return longScm, individualMem
+		return longScm, individualMem, median_mem_tick
 	else:
-		return longScm,None
+		return longScm,None, None
 
-def model0(par, ticks,save_every=10,save_individual=False):
+def model0(par, ticks, save_every=10, save_individual=True):
 	'''
 	Runs Model 0 for the given set of parameters and the given number of timesteps.
 
@@ -95,10 +100,10 @@ def model0(par, ticks,save_every=10,save_individual=False):
 		raise NameError('Parameters must be N,p,q,beta,gtype')
 	N,p,q,beta,gtype = par
 	G = initialize_net(gtype,N)
-	longScm, individualMem = _master((N,p,q,beta), ticks,G=G, save_every=save_every,save_individual=save_individual)
-	return longScm, individualMem
+	longScm, individualMem,median_mem_tick  = _master((N,p,q,beta), ticks,G=G, save_every=save_every,save_individual=save_individual)
+	return longScm, individualMem, median_mem_tick
 
-def model1(par, ticks, save_every=10,save_individual=False):
+def model1(par, ticks, save_every=10,save_individual=True):
 	'''
 	Runs Model 1 for the given set of parameters and the given number of timesteps.
 
@@ -128,7 +133,7 @@ def model1(par, ticks, save_every=10,save_individual=False):
 	G = initialize_net(gtype,N)
 	ps = set_hubs(G,pStar,pHubs,top)
 	longScm, individualMem = _master((N,ps,q,beta), ticks,G=G, save_every=save_every,save_individual=save_individual)
-	return longScm, individualMem
+	return longScm, individualMem, median_mem_tick,var_mem_tick
 
 def model0_old(par, ticks,save_every=10):
 	'''
